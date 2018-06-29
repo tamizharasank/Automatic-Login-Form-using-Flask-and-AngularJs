@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <title>simple register form</title>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<body ng-controller="Ctrl">
+<nav class="navbar navbar-inverse bg-primary">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">simple register</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+    <li class="active"><a href="#">Home</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span>Register</a></li>
+        <li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+  
+<div class="container">
+  <div class="col-md-6 col-md-offset-3">
+  <form autocomplete="off">
+     <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Name" name="name" ng-model="ad.name" required="required">
+    </div>
+  </div>
+   <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="inputEmail3" name="email" ng-model="ad.email" placeholder="Email" required="required">
+    </div>
+    
+  </div>
+    <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">DOB</label>
+    <div class="col-sm-10">
+      <input type="date" class="form-control" id="inputEmail3" name="email" ng-model="ad.dob" required="required">
+    </div>
+    
+  </div>
+    <div class="form-group row">
+    <label for="inputPassword3" class="col-sm-2 col-form-label">Mobile</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" name="mobile" ng-model="ad.mobile" id="inputPassword3" placeholder="Enter Mobile Number" maxlength="10" required="required">
+    </div>
+    <span class="text-danger"></span>
+  </div>
+      <div class="form-group row">
+    <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" name="mobile" ng-model="ad.password" id="inputPassword3" placeholder="Enter Password" required="required">
+    </div>
+    <span class="text-danger"></span>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputAddress">Address</label>
+    <input type="text" class="form-control" name="address" ng-model="ad.address" id="inputAddress" placeholder="ex: 1234 Main St" required="required">
+  </div>
+    <div class="form-group row">
+    <label for="inputAddress">roll</label>
+    <input type="text" class="form-control" name="roll" ng-model="ad.roll" id="inputAddress" placeholder="enter roll" required="required">
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">State</label>
+      <select class="form-control" id="inputCity" name="state" ng-model="ad.state" required="required">
+        <option ng-repeat="s in stat" value="{a s.id a}">{a s.state a}</option>
+      </select>
+    </div>      
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">City</label>
+    <select class="form-control" id="inputCity" name="city" ng-model="ad.city" required="required">
+        <option ng-repeat="s in cit" ng-if="s.referid == ad.state" value="{a s.city a}">{a s.city a}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-10">
+  <div class="form-group">
+  <button ng-click="add()" name="ad" class="btn btn-info">submit</button>
+  </div>
+    </div>
+  </div>
+    <span><big class="text-success">{a succ a}</big></span>
+
+</form>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<script src="../static/js/angular.js" type="text/javascript">
+</script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
+        <script>
+var app = angular.module('myApp', []);
+   app.controller('Ctrl', function($scope,$window, $http,$location,$templateCache) {  
+     $scope.ad = {};
+   $scope.add = function add() {
+   
+     // alert(JSON.stringify($scope.ad)); 
+
+    $http.post("/register.json",$scope.ad).success(function (data) {
+        $scope.succ=data;
+        // alert(data);
+        // $window.location.href = '/';
+       
+    });
+
+    }
+    $http.get("/state.json").success(function (data) {
+        $scope.stat=data;  
+        // alert(JSON.stringify(data));               
+    });
+        $http.get("/city.json").success(function (data) {
+        $scope.cit=data;            
+        // alert(JSON.stringify(data));               
+
+    });
+  });
+   app.config(['$interpolateProvider', function($interpolateProvider) {
+  $interpolateProvider.startSymbol('{a');
+  $interpolateProvider.endSymbol('a}');
+}]);
+
+
+</script>  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</html>
